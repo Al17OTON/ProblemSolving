@@ -1,47 +1,39 @@
-import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
 
 public class Main {
+    static int N, R, C;
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        
+        N = Integer.parseInt(st.nextToken());
+        R = Integer.parseInt(st.nextToken());
+        C = Integer.parseInt(st.nextToken());
 
-	static int N, R, C;
-	public static void main(String[] args) {
-		Scanner sc = new Scanner(System.in);
-		N = sc.nextInt();
-		R = sc.nextInt();
-		C = sc.nextInt();
-		
-		int lev = (int)Math.pow(2, N);
-		
-		System.out.println(recursive(0, 0, lev, 0));
-		
-	}
+        System.out.println(recursive(N, R, C, 0));
+    }
 
-	static long recursive(int r, int c, int lev, long startNum) {
-		if(lev == 2) {
-			if(r == R && c == C) return startNum;
-			else if(r == R && c + 1 == C) return startNum + 1;
-			else if(r + 1 == R && c == C) return startNum + 2;
-			else return startNum + 3;
-		}
-		
-		int tmp = lev / 2;
-		long add = (lev / 4) * lev;
-		
-		if(r <= R && R < r + tmp && c <= C && C < c + tmp) {
-			
-			return recursive(r, c, tmp, startNum);
-			
-		} else if(r <= R && R < r + tmp && c + tmp <= C && C < c + lev) {
-			
-			return recursive(r, c + tmp, tmp, startNum + add);
-			
-		} else if(r + tmp <= R && R < r + lev && c <= C && C < c + tmp) {
-			
-			return recursive(r + tmp, c, tmp, startNum + add * 2);
-			
-		} else {
-			
-			return recursive(r + tmp, c + tmp, tmp, startNum + add * 3);
-			
-		}
-	}
+    static int recursive(int n, int r, int c, int num) {
+        if(n == 1) {
+            if(r == 0 && c == 0) return num;
+            if(r == 0 && c == 1) return num + 1;
+            if(r == 1 && c == 0) return num + 2;
+            return num + 3;
+        }
+
+        int pow = (int)Math.pow(2, n);
+        int mid = pow / 2 - 1;
+
+        boolean rpos = r > mid ? true : false;
+        boolean cpos = c > mid ? true : false;
+        int time = 0;
+        if(rpos) time += 2;
+        if(cpos) time += 1;
+
+        return recursive(n - 1, rpos ? (r - 1) - mid : r, cpos ? (c - 1) - mid : c, num + (pow * pow / 4) * time);
+        
+    }
 }
