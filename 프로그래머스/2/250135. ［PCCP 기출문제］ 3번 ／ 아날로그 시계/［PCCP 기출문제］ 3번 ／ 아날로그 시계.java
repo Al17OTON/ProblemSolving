@@ -35,8 +35,6 @@ class Solution {
         preMin = min % hourCycle;
         preHour = hour % hourCycle;
         
-        System.out.println(hour + " " + min + " " + sec);
-        
         for(; start < end; start++) {
             sec = (preSec + secMove);
             min = (preMin + minMove);
