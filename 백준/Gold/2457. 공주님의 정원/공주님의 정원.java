@@ -4,27 +4,20 @@ import java.io.InputStreamReader;
 import java.util.PriorityQueue;
 import java.util.StringTokenizer;
 
+// 그리디
 public class Main {
 
-    static class Flower {
+    static class Flower implements Comparable<Flower> {
         int start_date, end_date;
 
         public Flower(int start_date, int end_date) {
             this.start_date = start_date;
             this.end_date = end_date;
         }
-    }
-    
-    static class StartFlower implements Comparable<StartFlower> {
-        Flower f;
-
-        public StartFlower(Flower f) {
-            this.f = f;
-        }
 
         @Override
-        public int compareTo(StartFlower o) {
-            return Integer.compare(this.f.start_date, o.f.start_date);
+        public int compareTo(Flower o) {
+            return Integer.compare(this.start_date, o.start_date);
         }
     }
     
@@ -32,7 +25,7 @@ public class Main {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int N = Integer.parseInt(br.readLine());
 
-        PriorityQueue<StartFlower> start = new PriorityQueue<>();
+        PriorityQueue<Flower> start = new PriorityQueue<>();
         StringTokenizer st;
         for(int n = 0; n < N; n++) {
             st = new StringTokenizer(br.readLine());
@@ -41,15 +34,14 @@ public class Main {
             int end_m = Integer.parseInt(st.nextToken());
             int end_d = Integer.parseInt(st.nextToken());
 
-            start.offer(new StartFlower(new Flower(makeDate(start_m, start_d), makeDate(end_m, end_d))));
+            start.offer(new Flower(makeDate(start_m, start_d), makeDate(end_m, end_d)));
         }
 
-        // PriorityQueue<EndFlower> end = new PriorityQueue<>();
         int current_time = 301, count = 0;
         while(!start.isEmpty() && current_time < 1200) {
             int max_end_time = -1;
-            while(!start.isEmpty() && start.peek().f.start_date <= current_time) {
-                if(isInside(start.peek().f, current_time)) max_end_time = Math.max(max_end_time, start.peek().f.end_date);
+            while(!start.isEmpty() && start.peek().start_date <= current_time) {
+                if(isInside(start.peek(), current_time)) max_end_time = Math.max(max_end_time, start.peek().end_date);
                 start.poll();
             }
 
