@@ -1,80 +1,102 @@
-#define _CRT_SECURE_NO_WARNINGS
 #define MAX 100001
-#define YEAR 365
 #include <iostream>
-#include <algorithm>
+#include <queue>
 
-int dateArr[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}; //1 ~ 12 월
+using namespace std;
+
+int date[12] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
 
 struct Flower {
-	int startMonth, startDay;
-	int endMonth, endDay;
+	int start_m, start_d, end_m, end_d;
+	int total_date;
+	int start_date, end_date;
+
+	bool operator <(const Flower& a) const {
+		/*if (this->start_m == a.start_m) {
+			if (this->start_d == a.start_d) return this->total_date < a.total_date;
+			return this->start_d > a.start_d;
+		}
+		return this->start_m > a.start_m;*/
+		
+		//if (this->start_date == a.start_date) return this->total_date < a.total_date;
+		return this->start_date > a.start_date;
+	}
 };
 
-int date2Index(int month, int day) {
-	int idx = day - 1;
-	for (int i = 1; i < month; i++) {
-		idx += dateArr[i - 1];
+struct tmp_Flower {
+	Flower f;
+
+	bool operator <(const tmp_Flower& a) const {
+		return this->f.end_date < a.f.end_date;
 	}
-	return idx;
+};
+
+int N;
+priority_queue<Flower> pq;
+
+int get_date(int m, int d) {
+	int start = 0;
+	for (int i = 1; i < m; i++) start += date[i];
+	return start + d;
 }
 
-bool compare(const Flower& a, const Flower& b) {
-	if (a.startMonth == b.startMonth && a.startDay == b.startDay) {	//시작일이 같은경우
-		if (a.endMonth == b.endMonth) return a.endDay > b.endDay;	//꽃이 지는 날 기준으로 정렬
-		return a.endMonth > b.endMonth;
-	}
-	if (a.startMonth == b.startMonth) return a.startDay < b.startDay;
-	return a.startMonth < b.startMonth;
+
+int get_total_date(int start_m, int start_d, int end_m, int end_d) {
+	int total = 0;
+	for (int i = start_m; i < end_m; i++) total += date[i];
+	return total + end_d - start_d;
 }
 
-int N, counter = YEAR - (dateArr[0] + dateArr[1] + dateArr[11]); //1, 2, 12월 제외
-Flower flowers[MAX];
-int timeTable[YEAR] = { 0 };	//1 년 = 365 문제에서 윤년을 고려하지 않는다.
-
-int dp();
+bool is_inside(Flower a, int cur_start_date) {
+	return a.start_date <= cur_start_date && a.end_date > cur_start_date;
+}
 
 int main() {
-	scanf("%d", &N);
+	ios::sync_with_stdio(false);
+	cin.tie(NULL);
+
+	cin >> N;
 
 	for (int n = 0; n < N; n++) {
-		scanf("%d %d %d %d", &flowers[n].startMonth, &flowers[n].startDay, &flowers[n].endMonth, &flowers[n].endDay);
-		if (flowers[n].startMonth <= 2) {
-			flowers[n].startMonth = 3;
-			flowers[n].startDay = 1;
+		int start_m, start_d, end_m, end_d;
+		cin >> start_m >> start_d >> end_m >> end_d;
+
+		/*if (start_m <= 2) {
+			start_m = 3;
+			start_d = 1;
 		}
-		if (flowers[n].endMonth == 12) {
-			flowers[n].endMonth = 12;
-			flowers[n].endDay = 1;
-		}
+		if (end_m == 12) {
+			end_d = 1;
+		}*/
+
+		pq.push({start_m, start_d, end_m, end_d, get_total_date(start_m, start_d, end_m, end_d), start_m * 100 + start_d, end_m * 100 + end_d});
 	}
 
-	std::sort(flowers, flowers + N, compare);
-	
-	printf("%d\n", dp());
-	return 0;
-}
+	int current_m = 3, current_d = 1;
+	int count = 0;
 
-int dp() {
-	int curIdx = date2Index(3, 1);
-	if (flowers[0].startMonth != 3 && flowers[0].startDay != 1) {
-		return 0;
-	}
+	while (!pq.empty() && current_m < 12) {
+		priority_queue<tmp_Flower> tmp;
 
-	for (int n = 0; n < N; n++) {
-		int startIdx = date2Index(flowers[n].startMonth, flowers[n].startDay);
-		int endIdx = date2Index(flowers[n].endMonth, flowers[n].endDay);
-
-		if (startIdx > curIdx) return 0;	//중간에 꽃이 안피는 시기가 존재하면 0
-		if (endIdx <= curIdx) continue;		//꽃을 최소한으로 해야하니 이미 꽃이 피어있다면 제외
+		int current_date = current_m * 100 + current_d;
+		while (!pq.empty() && pq.top().start_date <= current_date) {
+			if(is_inside(pq.top(), current_date)) tmp.push({ pq.top() });
+			pq.pop();
+		}
 		
-
-		for (; curIdx < endIdx; curIdx++) {
-			timeTable[curIdx] = timeTable[startIdx - 1] + 1;
-			counter--;
+		if (tmp.empty()) {
+			count = 0;
+			break;
 		}
+		count++;
+		tmp_Flower f = tmp.top();
+		tmp.pop();
 
-		if (counter <= 0) break;
+		current_m = f.f.end_m;
+		current_d = f.f.end_d;
 	}
-	return timeTable[date2Index(11, 30)];
+
+	if (current_m < 12) count = 0;
+
+	cout << count;
 }
