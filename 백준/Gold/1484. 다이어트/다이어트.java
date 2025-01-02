@@ -18,7 +18,9 @@ public class Main {
         while(true) {
             long calc = i * i - j * j;
             if(calc == G) sb.append(i).append("\n");
-            else if(i - j == 1 && calc > G) break;
+            else if(i == j) break;
+
+            //더 클 경우 다이어트 전 몸무게를 늘려준다.
             if(calc > G) j++;
             else i++;
         }
