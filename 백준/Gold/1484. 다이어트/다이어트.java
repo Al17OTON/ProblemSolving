@@ -17,10 +17,8 @@ public class Main {
 
         while(true) {
             long calc = i * i - j * j;
-            if(calc == G) {
-                sb.append(i).append("\n");
-            }
-            if(i - j == 1 && calc > G) break;
+            if(calc == G) sb.append(i).append("\n");
+            else if(i - j == 1 && calc > G) break;
             if(calc > G) j++;
             else i++;
         }
