@@ -1,0 +1,3 @@
+-- 코드를 작성해주세요
+
+Select ID, LENGTH From FISH_INFO ORDER BY IFNULL(LENGTH, 10) DESC, ID LIMIT 10
