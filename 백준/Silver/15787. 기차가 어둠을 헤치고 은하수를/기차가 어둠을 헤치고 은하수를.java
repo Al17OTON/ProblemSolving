@@ -39,11 +39,20 @@ public class Main {
             }
         }
 
-        HashSet<Integer> set = new HashSet<>();
+        // HashSet<Integer> set = new HashSet<>();
+        // int result = 0;
+        // for(int n = 1; n <= N; n++) {
+        //     if(!set.contains(train[n])) {
+        //         set.add(train[n]);
+        //         result++;
+        //     }
+        // }
+
+        boolean[] set = new boolean[1 << 21];
         int result = 0;
         for(int n = 1; n <= N; n++) {
-            if(!set.contains(train[n])) {
-                set.add(train[n]);
+            if(!set[train[n]]) {
+                set[train[n]] = true;
                 result++;
             }
         }
