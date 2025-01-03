@@ -1,7 +1,6 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.HashSet;
 import java.util.StringTokenizer;
 
 public class Main {
@@ -39,15 +38,6 @@ public class Main {
             }
         }
 
-        // HashSet<Integer> set = new HashSet<>();
-        // int result = 0;
-        // for(int n = 1; n <= N; n++) {
-        //     if(!set.contains(train[n])) {
-        //         set.add(train[n]);
-        //         result++;
-        //     }
-        // }
-
         boolean[] set = new boolean[1 << 21];
         int result = 0;
         for(int n = 1; n <= N; n++) {
@@ -70,11 +60,11 @@ public class Main {
 
     static void three(int i) {
         train[i] <<= 1;
-        train[i] &= ~(1 << 21);
+        train[i] &= ~(1 << 21); // 21번째 비트를 0으로 바꾸어준다. 그렇지 않으면 기차 상태가 같지만 비트값은 32비트라서 다르다고 판단하게 된다.
     }
 
     static void four(int i) {
         train[i] >>>= 1;
-        train[i] &= ~(1);
+        train[i] &= ~(1);   // 마찬가지로 1번째 비트를 0으로 바꾸어준다.
     }
 }
