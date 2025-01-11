@@ -1,88 +1,115 @@
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.Random;
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.StringTokenizer;
 
-public class Main {
-
-    static class Node {
-        int n;
-        String s;
-        public Node(int n, String s) {
-            this.n = n;
-            this.s = s;
-        }
+/*
+D : n*2 -> 값이 9999보다 크면 10000 떼고 나머지 4자리 저장
+S : n-1 -> 값이 0이면 9999 저장
+L : 왼편으로 -> 1234이면 2341
+ -> 1234*10%10000 + 1234*10/10000
+R : 오른편으로 -> 1234이면 4123
+ -> 1234/10 + 1234%10*1000
+ -> 0123/10 + 0123%10*1000
+ */
+class Map {
+    int num;
+    String ans;
+    Map (int num, String ans) {
+        this.num = num;
+        this.ans = ans;
     }
-
-    static Random r = new Random();
-    static int target, origin;
-    public static void main(String[] args) throws Exception {
+}
+public class Main {
+    static int answerN, inputN;
+    public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringBuilder sb = new StringBuilder();
         StringTokenizer st;
         int T = Integer.parseInt(br.readLine());
-        for(int t = 0; t < T; t++) {
+
+
+        for(int t=0; t<T; t++) {
             st = new StringTokenizer(br.readLine());
-            origin = Integer.parseInt(st.nextToken());
-            target = Integer.parseInt(st.nextToken());
+            inputN = Integer.parseInt(st.nextToken());
+            answerN = Integer.parseInt(st.nextToken());
 
-            sb.append(bfs() + "\n");
+            String out = BFS(inputN);
+
+            System.out.println(out);
         }
-        System.out.println(sb);
+
     }
 
-    static String bfs() {
-        Queue<Node> q = new LinkedList<>();
-        q.offer(new Node(origin, ""));
-        boolean[] v = new boolean[10000];
-        v[origin] = true;
+    static String BFS(int n) {
 
-        while(!q.isEmpty()) {
-            Node node = q.poll();
-            int n = node.n;
-            if(n == target) {
-                return node.s;
+        Deque<Map> q = new ArrayDeque<>();
+        boolean[] visit = new boolean[10000];
+        q.add(new Map(n, ""));
+        visit[n] = true;
+        String out = "";
+
+        while (!q.isEmpty()) {
+            int nNum;
+
+            Map map = q.pollFirst();
+            int num = map.num;
+            String answer = map.ans;
+
+            nNum = num*2%10000;
+            if(nNum == answerN) {
+                out= answer+"D";
+                break;
+            }
+            else {
+                if(!visit[nNum]) {
+                    visit[nNum] = true;
+                    q.add(new Map(nNum, answer+"D") );
+                }
             }
 
-            int D = D(n);
-            if(!v[D]) {
-                v[D] = true;
-                q.offer(new Node(D, node.s + "D"));
+            nNum = num-1;
+            if(num==0) nNum=9999;
+            if(nNum ==answerN) {
+                out= answer+"S";
+                break;
+            }
+            else {
+                if(!visit[nNum]) {
+                    visit[nNum] = true;
+                    q.add(new Map(nNum, answer+"S") );
+                }
             }
 
-            int S = S(n);
-            if(!v[S]) {
-                v[S] = true;
-                q.offer(new Node(S, node.s + "S"));
+            //12340%10000 + 1234*10/10000
+            nNum = (num*10) %10000 + num/1000;
+            if(nNum ==answerN) {
+                out= answer+"L";
+                break;
             }
-
-            int L = L(n);
-            if(!v[L]) {
-                v[L] = true;
-                q.offer(new Node(L, node.s + "L"));
+            else {
+                if(!visit[nNum]) {
+                    visit[nNum] = true;
+                    q.add(new Map(nNum, answer+"L") );
+                }
             }
+            //1234/10 + 1234%10*1000
+            nNum = num/10 + (num%10)*1000;
+            if(nNum ==answerN) {
+                out= answer+"R";
+                break;
+            }
+            else {
+                if(!visit[nNum]) {
+                    visit[nNum] = true;
+                    q.add(new Map(nNum, answer+"R") );
+                }
 
-            int R = R(n);
-            if(!v[R]) {
-                v[R] = true;
-                q.offer(new Node(R, node.s + "R"));
             }
         }
-        return "";
+
+        return out;
     }
 
-    static int D(int n) {
-        return (n * 2) % 10000;
-    }
-    static int S(int n) {
-        return n == 0 ? 9999 : n - 1;
-    }
-    static int L(int n) {
-        return (n % 1000) * 10 + (n / 1000);
-    }
-    static int R(int n) {
-        return (n % 10) * 1000 + (n / 10);
-    }
 }
