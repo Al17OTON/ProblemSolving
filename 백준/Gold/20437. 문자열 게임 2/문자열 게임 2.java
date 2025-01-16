@@ -1,45 +1,36 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 
 public class Main {
-
-    static int shortest, longest, K;
-    static char[] W;
-    static int[] count;
-
-    public static void main(String[] args) throws Exception{
+    public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringBuilder sb = new StringBuilder();
         int T = Integer.parseInt(br.readLine());
+        ArrayList<Integer>[] idxList = new ArrayList[26];
+        for(int i = 0; i < 26; i++) idxList[i] = new ArrayList<>();
 
         for(int t = 0; t < T; t++) {
-            W = br.readLine().toCharArray();
-            K = Integer.parseInt(br.readLine());
+            char[] W = br.readLine().toCharArray();
+            int K = Integer.parseInt(br.readLine());
+            int shortest = Integer.MAX_VALUE;
+            int longest = Integer.MIN_VALUE;
+
+            for(int i = 0; i < 26; i++) idxList[i].clear();
             
-            count = new int[26];
-            shortest = Integer.MAX_VALUE;
-            longest = Integer.MIN_VALUE;
+            for(int i = 0; i < W.length; i++) {
+                idxList[W[i] - 'a'].add(i);
+            }
 
-            for(char c : W) count[c - 'a']++;
+            for(int i = 0; i < 26; i++) {
+                int size = idxList[i].size();
+                if(size < K) continue;
 
-            for(int i = 0; i <= W.length - K; i++) {
-                int counter = 1;
-                int idx = i + 1;
-                while(idx < W.length && counter != K) {
-                    if(W[i] == W[idx++]) counter++;
+                for(int j = 0; j <= size - K; j++) {
+                    int len = idxList[i].get(j + K - 1) - idxList[i].get(j) + 1;
+                    shortest = Math.min(shortest, len);
+                    longest = Math.max(longest, len);
                 }
-
-                if(counter == K) shortest = Math.min(shortest, idx - i);
-
-                counter = 0;
-                idx = W.length - 1;
-                while(count[W[i] - 'a'] - counter != K - 1 && idx >= i) {
-                    if(W[idx--] == W[i]) counter++;
-                }
-
-                if(count[W[i] - 'a'] - counter == K - 1 && idx + 1 < W.length && W[i] == W[idx + 1]) longest = Math.max(longest, idx - i + 2);
-
-                count[W[i] - 'a']--;
             }
 
             if(shortest == Integer.MAX_VALUE) sb.append("-1\n");
@@ -48,5 +39,4 @@ public class Main {
 
         System.out.println(sb);
     }
-
 }
