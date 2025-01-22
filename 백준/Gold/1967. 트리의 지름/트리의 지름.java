@@ -47,8 +47,6 @@ public class Main {
             } else if(max_sec < cost) {
                 max_sec = cost;
             }
-
-            max = Math.max(max, cost);
         }
 
         MAX = Math.max(MAX, max + max_sec);
