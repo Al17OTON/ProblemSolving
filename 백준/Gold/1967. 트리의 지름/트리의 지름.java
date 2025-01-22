@@ -1,8 +1,6 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.PriorityQueue;
 import java.util.StringTokenizer;
 
 public class Main {
@@ -12,13 +10,11 @@ public class Main {
     }
     static int N, MAX = Integer.MIN_VALUE;
     static ArrayList<Node>[] adjList;
-    static int[][] adjCost;
 
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         N = Integer.parseInt(br.readLine());
         adjList = new ArrayList[N + 1];
-        adjCost = new int[2][N + 1];
         for(int n = 1; n <= N; n++) {
             adjList[n] = new ArrayList<>();
         }
@@ -36,25 +32,26 @@ public class Main {
         dfs(1);
 
         System.out.println(MAX);
+
     }
 
     static int dfs(int node) {
-        int max = 0;
+        int max = 0, max_sec = 0;
         for(int i = 0; i < adjList[node].size(); i++) {
             Node child = adjList[node].get(i);
             int cost = child.cost + dfs(child.to);
 
-            if(adjCost[0][node] < cost) {
-                adjCost[1][node] = adjCost[0][node];
-                adjCost[0][node] = cost;
-            } else if(adjCost[1][node] < cost) {
-                adjCost[1][node] = cost;
+            if(max < cost) {
+                max_sec = max;
+                max = cost;
+            } else if(max_sec < cost) {
+                max_sec = cost;
             }
 
             max = Math.max(max, cost);
         }
 
-        MAX = Math.max(MAX, adjCost[0][node] + adjCost[1][node]);
+        MAX = Math.max(MAX, max + max_sec);
         MAX = Math.max(MAX, max);
 
         return max;
