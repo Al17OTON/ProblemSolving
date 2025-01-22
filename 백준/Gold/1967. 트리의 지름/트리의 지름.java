@@ -12,16 +12,15 @@ public class Main {
     }
     static int N, MAX = Integer.MIN_VALUE;
     static ArrayList<Node>[] adjList;
-    static PriorityQueue<Integer>[] adjCost;
+    static int[][] adjCost;
 
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         N = Integer.parseInt(br.readLine());
         adjList = new ArrayList[N + 1];
-        adjCost = new PriorityQueue[N + 1];
+        adjCost = new int[2][N + 1];
         for(int n = 1; n <= N; n++) {
             adjList[n] = new ArrayList<>();
-            adjCost[n] = new PriorityQueue<>(Collections.reverseOrder());
         }
 
         StringTokenizer st;
@@ -37,7 +36,6 @@ public class Main {
         dfs(1);
 
         System.out.println(MAX);
-
     }
 
     static int dfs(int node) {
@@ -45,14 +43,18 @@ public class Main {
         for(int i = 0; i < adjList[node].size(); i++) {
             Node child = adjList[node].get(i);
             int cost = child.cost + dfs(child.to);
-            adjCost[node].add(cost);
+
+            if(adjCost[0][node] < cost) {
+                adjCost[1][node] = adjCost[0][node];
+                adjCost[0][node] = cost;
+            } else if(adjCost[1][node] < cost) {
+                adjCost[1][node] = cost;
+            }
+
             max = Math.max(max, cost);
         }
 
-        if(adjCost[node].size() >= 2) {
-            MAX = Math.max(MAX, adjCost[node].poll() + adjCost[node].poll());
-        }
-
+        MAX = Math.max(MAX, adjCost[0][node] + adjCost[1][node]);
         MAX = Math.max(MAX, max);
 
         return max;
