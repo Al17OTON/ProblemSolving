@@ -36,6 +36,7 @@ public class Main {
     }
 
     static int dfs(int node) {
+        // 각 노드의 자식들 중 가장 긴 두 개만 기억하기
         int max = 0, max_sec = 0;
         for(int i = 0; i < adjList[node].size(); i++) {
             Node child = adjList[node].get(i);
@@ -50,7 +51,6 @@ public class Main {
         }
 
         MAX = Math.max(MAX, max + max_sec);
-        MAX = Math.max(MAX, max);
 
         return max;
     }
