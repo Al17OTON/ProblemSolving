@@ -21,15 +21,20 @@ public class Main {
         
     }
     static int N, M, start, end;
-    static ArrayList<Edge>[] edges;
+    static ArrayList<Integer>[] edges;
     static int[] dp;
+    static int[][] adj;
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         N = Integer.parseInt(br.readLine());
         M = Integer.parseInt(br.readLine());
 
         edges = new ArrayList[N + 1];
-        for(int n = 1; n <= N; n++) edges[n] = new ArrayList<>();
+        adj = new int[N + 1][N + 1];
+        for(int n = 1; n <= N; n++) {
+            edges[n] = new ArrayList<>();
+            Arrays.fill(adj[n], -1);
+        }
 
         StringTokenizer st;
         for(int m = 0; m < M; m++) {
@@ -38,7 +43,12 @@ public class Main {
             int to = Integer.parseInt(st.nextToken());
             int cost = Integer.parseInt(st.nextToken());
             
-            edges[from].add(new Edge(to, cost));
+            if(adj[from][to] == -1) {
+                edges[from].add(to);
+                adj[from][to] = cost;
+            } else if(adj[from][to] > cost) {
+                adj[from][to] = cost;
+            }
         }
         st = new StringTokenizer(br.readLine());
         start = Integer.parseInt(st.nextToken());
@@ -62,10 +72,10 @@ public class Main {
 
             v[edge.to] = true;
             for(int i = 0; i < edges[edge.to].size(); i++) {
-                Edge e = edges[edge.to].get(i);
-                if(!v[e.to] && dp[e.to] > dp[edge.to] + e.cost) {
-                    dp[e.to] = dp[edge.to] + e.cost;
-                    pq.add(new Edge(e.to, dp[e.to]));
+                int next = edges[edge.to].get(i);
+                if(!v[next] && dp[next] > dp[edge.to] + adj[edge.to][next]) {
+                    dp[next] = dp[edge.to] + adj[edge.to][next];
+                    pq.add(new Edge(next, dp[next]));
                 }
             }
         }
