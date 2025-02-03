@@ -2,7 +2,7 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-    static int N, MAX = 1;
+    static int N, MAX = 0;
     static int[] box, dp;
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -15,7 +15,6 @@ public class Main {
         }
 
         dp = new int[N];
-        Arrays.fill(dp, 1);
         for(int n = 1; n < N; n++) {
             for(int i = n - 1; i >= 0; i--) {
                 if(box[n] > box[i]) {
@@ -25,6 +24,6 @@ public class Main {
             }
         }
 
-        System.out.println(MAX);
+        System.out.println(MAX + 1);
     }
 }
