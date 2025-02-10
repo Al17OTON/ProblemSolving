@@ -21,7 +21,6 @@ public class Main {
     }
 
     static int N, M;
-    // static int[][] adjCost;
     static ArrayList<int[]>[] adj;
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -29,10 +28,8 @@ public class Main {
         N = Integer.parseInt(st.nextToken());
         M = Integer.parseInt(st.nextToken());
         
-        // adjCost = new int[N + 1][N + 1];
         adj = new ArrayList[N + 1];
         for(int n = 1; n <= N; n++) {
-            // Arrays.fill(adjCost[n], Integer.MAX_VALUE);
             adj[n] = new ArrayList<int[]>();
         }
 
@@ -42,23 +39,16 @@ public class Main {
             int b = Integer.parseInt(st.nextToken());
             int c = Integer.parseInt(st.nextToken());
 
-            // if(adjCost[a][b] == Integer.MAX_VALUE) {
-            //     adj[a].add(b);
-            //     adj[b].add(a);
-            // }
-
-            // adjCost[a][b] = Math.min(c, adjCost[a][b]);
-            // adjCost[b][a] = adjCost[a][b];
             adj[a].add(new int[] {b, c});
             adj[b].add(new int[] {a, c});
         }
 
         for(int n = 1; n <= N; n++) adj[n].sort((a, b) -> a[1] - b[1]);
 
-        System.out.println(bfs());
+        System.out.println(dijkstra());
     }
     
-    static int bfs() {
+    static int dijkstra() {
         PriorityQueue<Truck> pq = new PriorityQueue<>();
         int[] v = new int[N + 1];
         Arrays.fill(v, Integer.MAX_VALUE);
@@ -67,14 +57,9 @@ public class Main {
         while(!pq.isEmpty()) {
             Truck t = pq.poll();
 
-            if(t.idx == N) {
-                return t.cost;
-            }
+            if(v[t.idx] < t.cost) continue;
 
             for(int i = 0; i < adj[t.idx].size(); i++) {
-                // int next = adj[t.idx].get(i);
-                // if(v[next] <= t.cost + adjCost[t.idx][next]) continue;
-                // v[next] = t.cost + adjCost[t.idx][next];
                 int[] next = adj[t.idx].get(i);
                 if(v[next[0]] <= t.cost + next[1]) continue;
                 v[next[0]] = t.cost + next[1];
@@ -83,7 +68,7 @@ public class Main {
             }
         }
 
-        return -1;
+        return v[N];
     }
 
 }
