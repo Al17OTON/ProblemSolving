@@ -80,7 +80,7 @@ public class Main {
                 for(int e = 0; e < edge.get(i).size(); e++) {
                     Edge ed = edge.get(i).get(e);
     
-                    if(dist[i] != 98765432 && dist[i] + ed.cost < dist[ed.to]) {
+                    if(dist[i] + ed.cost < dist[ed.to]) {
                         dist[ed.to] = dist[i] + ed.cost;
                         update = true;
                     }
@@ -94,7 +94,7 @@ public class Main {
                 for(int e = 0; e < edge.get(i).size(); e++) {
                     Edge ed = edge.get(i).get(e);
     
-                    if(dist[i] != 98765432 && dist[i] + ed.cost < dist[ed.to]) {
+                    if(dist[i] + ed.cost < dist[ed.to]) {
                         return true;
                     }
                 }
