@@ -14,17 +14,21 @@ public class Main {
 
         arr = new int[N];
         st = new StringTokenizer(br.readLine());
+
+        boolean flag = false;
         for(int n = 0; n < N; n++) {
             arr[n] = Integer.parseInt(st.nextToken());
             sum += arr[n];
+            if(arr[n] >= S) flag = true; // 어떤 한 원소가 S 값 이상이라면 탐색 X 
         }
 
-        System.out.println(solution());
+        System.out.println(flag ? 1 : twoPointer());
     }
 
-    static int solution() {
+    static int twoPointer() {
         if(sum < S) return 0; // 불가능한 경우
 
+        // 시작할 때, 첫번째 값을 가진 상태로 시작
         int left = 0, right = 1, curSum = arr[0];
         int minLen = N; 
 
