@@ -23,20 +23,25 @@ public class Main {
     }
 
     static int solution() {
-        if(sum < S) return 0;
+        if(sum < S) return 0; // 불가능한 경우
 
         int left = 0, right = 1, curSum = arr[0];
         int minLen = N; 
 
-        while(right <= N && left < N && minLen != 1) {
+        // 탐색이 끝나지 않았는데 최소값이 1이라면 더 탐색하지 않아도 된다.
+        while(minLen != 1) {
             if(curSum >= S && right - left < minLen) minLen = right - left;
 
+            // 만약 가장 왼쪽 값을 빼도 된다면 빼기
             if(curSum - arr[left] >= S && left < right - 1) {
                 curSum -= arr[left++];
             }
+            // 더 이상 왼쪽 값을 뺄 수 없다면 오른쪽 값 넣기
             else if(right < N) {
                 curSum += arr[right++];
-            } else break;
+            }
+            // 왼쪽 값을 뺄 수도 오른쪽 값을 더할 수도 없다면 탐색 종료 
+            else break;
         }
         
         return minLen;
