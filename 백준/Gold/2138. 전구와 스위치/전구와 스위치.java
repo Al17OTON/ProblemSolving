@@ -19,22 +19,18 @@ public class Main {
         }
         tmp = A.clone();
 
+        boolean aFlag = false, bFlag = false;
         int aCount = 0, bCount = 1;
         for(int i = 0; i < N - 1; i++) {
             if(A[i] != B[i]) {
                 A[i] = !A[i];
                 A[i + 1] = !A[i + 1];
                 A[i + 2] = !A[i + 2];
-                aCount++; 
+                aCount++;
             }
         }
+        if(A[N - 1] != B[N - 1]) aFlag = true;
 
-        for(int i = 0; i < N; i++) {
-            if(A[i] != B[i]) {
-                aCount = -1;
-                break;
-            }
-        }
 
         A = tmp;
         A[0] = !A[0];
@@ -48,17 +44,11 @@ public class Main {
                 bCount++; 
             }
         }
+        if(A[N - 1] != B[N - 1]) bFlag = true;
 
-        for(int i = 0; i < N; i++) {
-            if(A[i] != B[i]) {
-                bCount = -1;
-                break;
-            }
-        }
-
-        if(bCount == aCount) System.out.println(aCount);
-        else if(aCount == -1) System.out.println(bCount);
-        else if(bCount == -1) System.out.println(aCount);
+        if(aFlag && bFlag) System.out.println(-1);
+        else if(aFlag) System.out.println(bCount);
+        else if(bFlag) System.out.println(aCount);
         else System.out.print(aCount > bCount ? bCount : aCount);
     }
 }
