@@ -32,9 +32,9 @@ public class Main {
         }
 
         for(int n = 0; n < N; n++) {
-            MAX = Math.max(MAX, dp[n][0] + dp[n][1] + 1);
+            MAX = Math.max(MAX, dp[n][0] + dp[n][1]);
         }
         
-        System.out.println(MAX);
+        System.out.println(MAX + 1);
     }
 }
