@@ -1,124 +1,60 @@
 import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Arrays;
 import java.util.StringTokenizer;
 
-//이길때
-//비길때
-//질때
-// team idx
 public class Main {
-    static BufferedReader br;
-    static StringTokenizer st;
-    static int N,M,Ans = Integer.MAX_VALUE,sum;
-    static int[] win, draw, lose;
-    static boolean[][] v;
-    static int[][] dir = {{0,1},{1,0},{0,-1},{-1,0}};
-    static boolean flag;
-    public static void main(String[] args) throws IOException {
-        //System.setIn(new FileInputStream("src/jiu/Main.txt"));
-        br = new BufferedReader(new InputStreamReader(System.in));
-
-        for (int i = 0; i < 4; i++) {
+    static final int COUNTRY = 6;
+    static int[][] score = new int[COUNTRY][3];
+    public static void main(String[] args) throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st;
+        StringBuilder sb = new StringBuilder();
+        for(int f = 0; f < 4; f++) {
             st = new StringTokenizer(br.readLine());
-            flag = false;
-            sum = 0;
-            win = new int[6];
-            draw = new int[6];
-            lose = new int[6];
-            for (int j = 0; j < 6; j++) {
-                win[j] = Integer.parseInt(st.nextToken());
-                draw[j] = Integer.parseInt(st.nextToken());
-                lose[j] = Integer.parseInt(st.nextToken());
-                int num = win[j] + draw[j] + lose[j];
-                if(num != 5){
-                    break;
-                }
-                sum += num;
+
+            int totalWin = 0, totalDraw = 0, totalLoss = 0;
+            boolean flag = true;
+            for(int c = 0; c < COUNTRY; c++) {
+                int win = Integer.parseInt(st.nextToken());
+                int draw = Integer.parseInt(st.nextToken());
+                int loss = Integer.parseInt(st.nextToken());
+
+                score[c][0] = win;
+                score[c][1] = draw;
+                score[c][2] = loss;
+
+                totalWin += win;
+                totalDraw += draw;
+                totalLoss += loss;
+
+                if(win + draw + loss != 5) flag = false;
             }
 
-            if(sum == 30) {
-                dfs(0, 1, 0);
+            if(totalWin != totalLoss || totalDraw % 2 != 0) flag = false;
+            if(flag) {
+                flag = dfs(0, 1);
             }
 
-//            print(win);
-//            print(draw);
-//            print(lose);
-            System.out.print((flag ? 1:0) + " ");
+            sb.append((flag ? "1 " : "0 "));
         }
 
-
+        System.out.println(sb);
     }
-    //    경우의 수 A : B,C,D,E,F | B : C,D,E,F | C : D,E,F | D : E,F | E : F
-    private static void dfs(int team, int idx, int cnt) {
-        if(flag) {
-            return;
-        }
-        if(cnt == 15) {
-//            System.out.println(Arrays.toString(win));
-//            System.out.println(Arrays.toString(draw));
-//            System.out.println(Arrays.toString(lose));
-            flag = true;
-            return;
-        }
 
-        if(cnt == 5) {
-            team++;
-            idx = 1;
-        }else if(cnt == 9) {
-            team++;
-            idx = 1;
-        }else if(cnt == 12) {
-            team++;
-            idx = 1;
-        }else if(cnt == 14) {
-            team++;
-            idx = 1;
+    static boolean dfs(int country, int target) {
+        if(country >= COUNTRY) return true;
+        if(target >= COUNTRY) return dfs(country + 1, country + 2);
+
+        for(int i = 0; i < 3; i++) {
+            if(score[country][0 + i] > 0 && score[target][2 - i] > 0) {
+                score[country][0 + i]--;
+                score[target][2 - i]--;
+                if(dfs(country, target + 1)) return true;
+                score[country][0 + i]++;
+                score[target][2 - i]++;
+            }
         }
 
-//        재귀돌면서 첫째 팀이 0보다 작거나 두번재 팀이 0보다 작은경우 리턴
-
-
-//        첫팀이 이길때
-
-        if(win[team]>0 && lose[team+idx] > 0 ) {
-            win[team]--;
-            lose[team+idx]--;
-            dfs(team,idx+1,cnt+1);
-            win[team]++;
-            lose[team+idx]++;
-        }
-
-//        두번째 팀이 이길때
-
-        if(win[team+idx]>0 && lose[team] > 0 ) {
-            win[team+idx]--;
-            lose[team]--;
-            dfs(team, idx + 1, cnt + 1);
-            win[team+idx]++;
-            lose[team]++;
-        }
-
-//        무승부
-
-        if(draw[team+idx]>0 && draw[team] > 0 ) {
-            draw[team]--;
-            draw[team+idx]--;
-            dfs(team, idx + 1, cnt + 1);
-            draw[team]++;
-            draw[team+idx]++;
-        }
-
-
-
-    }
-    private static void print(int[] board) {
-        for (int i : board) {
-            System.out.print(i);
-        }
-        System.out.println();
-
+        return false;
     }
 }
