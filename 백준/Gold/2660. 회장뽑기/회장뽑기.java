@@ -46,17 +46,9 @@ public class Main {
             adj[to].add(from);
         }   
 
-        for(int n = 1; n <= N; n++) {
-            dijkstra(n);
-        }
-
         PriorityQueue<President> pq = new PriorityQueue<>();
         for(int n = 1; n <= N; n++) {
-            int max = 0;
-            for(int nn = 1; nn <= N; nn++) {
-                max = Math.max(max, dist[n][nn]);
-            }
-            pq.offer(new President(n, max));
+            pq.offer(new President(n, dijkstra(n)));
         }
 
         StringBuilder sb = new StringBuilder();
@@ -65,22 +57,20 @@ public class Main {
             sb.append(pq.poll().no).append(" ");
             count++;
         }
-        
-        System.out.println(min + " " + count);
-        System.out.println(sb);
-
+        System.out.println(min + " " + count + "\n" + sb.toString());
     }
 
-    static void dijkstra(int start) {
+    static int dijkstra(int start) {
         Arrays.fill(dist[start], 1000000);
         dist[start][start] = 0;
         boolean[] v = new boolean[N + 1];
-
+        int max = -1;
         int cur = start;
         while(true) {
             for(int i = 0; i < adj[cur].size(); i++) {
                 int to = adj[cur].get(i);
                 dist[start][to] = Math.min(dist[start][cur] + 1, dist[start][to]); 
+                max = Math.max(max, dist[start][to]);
             }
             v[cur] = true;
             
@@ -91,5 +81,6 @@ public class Main {
             if(next == 0) break;
             cur = next;
         }
+        return max;
     }
 }
