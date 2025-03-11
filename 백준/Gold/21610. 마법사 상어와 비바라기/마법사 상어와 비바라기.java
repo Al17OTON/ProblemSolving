@@ -75,6 +75,7 @@ public class Main {
                 map[cloud[p[0]][0]][cloud[p[0]][1]] += p[1];
             }
             cloudCnt = 0;
+            total = 0;
             for(int r = 0; r < N; r++) {
                 for(int c = 0; c < N; c++) {
                     if(!prev[r][c] && map[r][c] >= 2) {
@@ -83,16 +84,11 @@ public class Main {
                         cloudCnt++;
                         map[r][c] -= 2;
                     }
+                    total += map[r][c];
                     prev[r][c] = false;
                 }
             }
             
-        }
-
-        for(int r = 0; r < N; r++) {
-            for(int c = 0; c < N; c++) {
-                total += map[r][c];
-            }
         }
 
         System.out.println(total);
