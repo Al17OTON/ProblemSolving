@@ -50,6 +50,8 @@ public class Main {
         Queue<Coins> q = new LinkedList<>();
         q.offer(o);
 
+        boolean[][][][] v = new boolean[N][M][N][M];
+        
         int time = 0;
         while(!q.isEmpty() && time <= 10) {
             int size = q.size();
@@ -64,6 +66,9 @@ public class Main {
                 else if(a || b) {
                     return time;
                 }
+
+                if(v[p.a.r][p.a.c][p.b.r][p.b.c]) continue;
+                v[p.a.r][p.a.c][p.b.r][p.b.c] = true;
 
                 for(int d = 0; d < 4; ++d) {
                     Coin na = new Coin(p.a.r + dr[d], p.a.c + dc[d]);
