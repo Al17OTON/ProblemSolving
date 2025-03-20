@@ -1,63 +1,22 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.PriorityQueue;
+import java.util.Arrays;
 import java.util.StringTokenizer;
 
 public class Main {
-    static class Edge implements Comparable<Edge> {
-        int from, to, cost;
-
-        public Edge(int from, int to, int cost) {
-            this.from = from;
-            this.to = to;
-            this.cost = cost;
-        }
-
-        public int compareTo(Edge o) {
-            return this.cost - o.cost;
-        }
-        
-    }
-
-    static class Union {
-        int[] uni;
-        public Union(int n) {
-            uni = new int[n + 1];
-            for(int i = 1; i <= n; ++i) uni[i] = i;
-        }
-
-        int find(int a) {
-            if(uni[a] == a) return a;
-            return uni[a] = find(uni[a]);
-        }
-
-        boolean setUni(int a, int b) {
-            a = find(a);
-            b = find(b);
-
-            if(a == b) return false;
-            
-            uni[a] = b;
-            return true;
-        }
-    }
 
     static int N;
-    static PriorityQueue<Edge> pq = new PriorityQueue<>();
-    static Union union;
+    static int[][] adj;
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         N = Integer.parseInt(br.readLine());
 
-        union = new Union(N);
+        adj = new int[N][N];
         StringTokenizer st;
         for(int from = 0; from < N; ++from) {
             st = new StringTokenizer(br.readLine());
             for(int to = 0; to < N; ++to) {
-                int cost = Integer.parseInt(st.nextToken());
-                if(from < to) {
-                    pq.offer(new Edge(from, to, cost));
-                }
+                adj[from][to] = Integer.parseInt(st.nextToken());
             }
         }
 
@@ -65,17 +24,45 @@ public class Main {
     }
 
     static long MST() {
+        int[] dist = new int[N];
         long result = 0;
-        int selected = 0;
-        while(!pq.isEmpty() && selected != N - 1) {
-            Edge edge = pq.poll();
+        boolean[] set = new boolean[N];
+        Arrays.fill(dist, Integer.MAX_VALUE);
 
-            if(union.setUni(edge.from, edge.to)) {
-                result += edge.cost;
-                ++selected;
-            }
+        set[0] = true;
+        dist[0] = 0;
+
+        int selected = 1;
+        int minIdx = findMinIdx(0, set, dist);
+
+        while(selected != N) {
+            set[minIdx] = true;
+
+            minIdx = findMinIdx(minIdx, set, dist);
+
+            ++selected;
         }
-        
+
+        for(int i = 0; i < N; ++i) result += dist[i];
+
         return result;
     }
+
+    static int findMinIdx(int from, boolean[] set, int[] dist) {
+        int idx = 0, minDist = Integer.MAX_VALUE;
+
+        for(int i = 0; i < N; ++i) {
+            if(i != from && !set[i]) {
+                dist[i] = Math.min(dist[i], adj[from][i]);
+                if(dist[i] < minDist){
+                    minDist = dist[i];
+                    idx = i;
+                }
+                
+            }
+        }
+        return idx;
+    }
+    
+    
 }
