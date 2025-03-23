@@ -11,7 +11,7 @@ int solution(vector<int> people, int limit) {
     sort(people.begin(), people.end());
     priority_queue<int> pq;
     
-    for(int i = people.size() - 1; i >= 0; i--) {
+    for(int i = people.size() - 1; i >= 0; --i) {
         int w = people[i];
         if(!pq.empty() && pq.top() >= w) pq.pop();
         else {
