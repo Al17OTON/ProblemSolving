@@ -17,6 +17,7 @@ public class Main {
         {2, 4, 3, 1, 2, 1, 2, 3, 1, 0}
     };
     static int N, K, P, X;
+    static int result = 0;
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
@@ -25,7 +26,7 @@ public class Main {
         P = Integer.parseInt(st.nextToken());
         X = Integer.parseInt(st.nextToken());
 
-        System.out.println(sim());
+        System.out.println(sim() - 1);
     }
 
     static int sim() {
@@ -35,7 +36,7 @@ public class Main {
         
         for(int i = 1; i <= N; ++i) {
             int count = countChange(cur, correct);
-            if(count > 0 && count <= P) {
+            if(count <= P) {
                 ++result;
             }
             increment(cur);
