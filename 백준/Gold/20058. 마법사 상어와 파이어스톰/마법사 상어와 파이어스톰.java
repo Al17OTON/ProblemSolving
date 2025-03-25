@@ -19,7 +19,7 @@ public class Main {
         Q = Integer.parseInt(st.nextToken());
         SIZE = (int)Math.pow(2, N);
         map = new int[SIZE][SIZE];
-        copy = new int[SIZE][];
+        copy = new int[SIZE][SIZE];
         for(int r = 0; r < SIZE; ++r) {
             st = new StringTokenizer(br.readLine());
             for(int c = 0; c < SIZE; ++c) {
@@ -68,9 +68,15 @@ public class Main {
 
         return result;
     }
+    static void copy() {
+        for(int r = 0; r < SIZE; ++r) {
+            for(int c = 0; c < SIZE; ++c) copy[r][c] = map[r][c];
+        }
+    }
 
     static void fireStorm(int L) {
-        for(int r = 0; r < SIZE; ++r) copy[r] = map[r].clone();
+        // for(int r = 0; r < SIZE; ++r) copy[r] = map[r].clone();
+        copy();
         int size = (int)Math.pow(2, L);
         for(int r = 0; r < SIZE; r += size) {
             for(int c = 0; c < SIZE; c += size) {
