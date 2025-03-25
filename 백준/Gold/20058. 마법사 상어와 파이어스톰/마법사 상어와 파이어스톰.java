@@ -8,6 +8,7 @@ import java.util.StringTokenizer;
 public class Main {
     static int N, Q, SIZE;
     static int[][] map;
+    static int[][] copy; 
     static Queue<int[]> q = new LinkedList<>();
     static int[] dr = {-1, 1, 0, 0};
     static int[] dc = {0, 0, -1, 1};
@@ -18,6 +19,7 @@ public class Main {
         Q = Integer.parseInt(st.nextToken());
         SIZE = (int)Math.pow(2, N);
         map = new int[SIZE][SIZE];
+        copy = new int[SIZE][];
         for(int r = 0; r < SIZE; ++r) {
             st = new StringTokenizer(br.readLine());
             for(int c = 0; c < SIZE; ++c) {
@@ -68,10 +70,11 @@ public class Main {
     }
 
     static void fireStorm(int L) {
+        for(int r = 0; r < SIZE; ++r) copy[r] = map[r].clone();
         int size = (int)Math.pow(2, L);
         for(int r = 0; r < SIZE; r += size) {
             for(int c = 0; c < SIZE; c += size) {
-                rotate(r, c, size);
+                rotate2(r, c, size);
             }
         }
     
@@ -120,6 +123,14 @@ public class Main {
             c += 1;
             for(int j = 0; j < len; ++j) {
                 swap(r, c + j, r - len + 1 + j, c - 1);
+            }
+        }
+    }
+
+    static void rotate2(int start_r, int start_c, int l) {
+        for(int r = 0; r < l; ++r) {
+            for(int c = 0; c < l; ++c) {
+                map[c + start_r][start_c + l - 1 - r] = copy[r + start_r][c + start_c];
             }
         }
     }
