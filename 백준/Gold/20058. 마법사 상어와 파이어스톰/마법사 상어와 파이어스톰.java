@@ -69,18 +69,15 @@ public class Main {
         return result;
     }
     static void copy() {
-        for(int r = 0; r < SIZE; ++r) {
-            for(int c = 0; c < SIZE; ++c) copy[r][c] = map[r][c];
-        }
+        for(int r = 0; r < SIZE; ++r) System.arraycopy(map[r], 0, copy[r], 0, SIZE);
     }
 
     static void fireStorm(int L) {
-        // for(int r = 0; r < SIZE; ++r) copy[r] = map[r].clone();
         copy();
         int size = (int)Math.pow(2, L);
         for(int r = 0; r < SIZE; r += size) {
             for(int c = 0; c < SIZE; c += size) {
-                rotate2(r, c, size);
+                rotate(r, c, size);
             }
         }
     
@@ -112,38 +109,10 @@ public class Main {
     }
 
     static void rotate(int start_r, int start_c, int l) {
-        for(int i = 0; i < l / 2; ++i) {
-            int r = start_r + i;
-            int c = start_c + i;
-            int len = l - (2 * i) - 1;
-            for(int j = 0; j < len; ++j) {
-                swap(r, c + j, r + j, c + len);
-            }
-
-            r += 1;
-            for(int j = 0; j < len; ++j) {
-                swap(r + j, c, r - 1, c + (len - 1) - j);
-            }
-
-            r += len - 1;
-            c += 1;
-            for(int j = 0; j < len; ++j) {
-                swap(r, c + j, r - len + 1 + j, c - 1);
-            }
-        }
-    }
-
-    static void rotate2(int start_r, int start_c, int l) {
         for(int r = 0; r < l; ++r) {
             for(int c = 0; c < l; ++c) {
                 map[c + start_r][start_c + l - 1 - r] = copy[r + start_r][c + start_c];
             }
         }
-    }
-
-    static void swap(int r1, int c1, int r2, int c2) {
-        int tmp = map[r1][c1];
-        map[r1][c1] = map[r2][c2];
-        map[r2][c2] = tmp;
     }
 }
