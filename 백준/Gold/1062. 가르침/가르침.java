@@ -18,12 +18,12 @@ public class Main {
             words[n] = string2Bit(word);
         }
 
-        int bit = 0;
-        if(K > 0) bit |= (1 << 'a' - 'a'); 
-        if(K > 1) bit |= (1 << 'n' - 'a'); 
-        if(K > 2) bit |= (1 << 't' - 'a'); 
-        if(K > 3) bit |= (1 << 'i' - 'a'); 
-        if(K > 4) bit |= (1 << 'c' - 'a'); 
+        int bit = string2Bit("antic");
+        // if(K > 0) bit |= (1 << 'a' - 'a'); 
+        // if(K > 1) bit |= (1 << 'n' - 'a'); 
+        // if(K > 2) bit |= (1 << 't' - 'a'); 
+        // if(K > 3) bit |= (1 << 'i' - 'a'); 
+        // if(K > 4) bit |= (1 << 'c' - 'a'); 
 
         System.out.println(combination(1, 5, bit));
     }
