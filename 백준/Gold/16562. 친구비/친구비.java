@@ -29,7 +29,8 @@ public class Main {
             return true;
         }
 
-        int getCost(int a) {return cost[find(a)];}
+        boolean isRoot(int a) {return uni[a] == a;}
+        int getCost(int a) {return cost[a];}
     }
 
     static int N, M, K;
@@ -66,7 +67,7 @@ public class Main {
         
         for(int i = 1; i <= N; ++i) {
             int cost = union.getCost(i);
-            if(union.setUni(0, i)) need += cost;
+            if(union.isRoot(i) && union.setUni(0, i)) need += cost;
 
             if(need > K) break;
         }
