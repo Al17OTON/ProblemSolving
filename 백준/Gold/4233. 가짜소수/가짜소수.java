@@ -10,13 +10,10 @@ public class Main {
 
         while(true) {
             st = new StringTokenizer(br.readLine());
-            long first = Long.parseLong(st.nextToken());
-            long second = Long.parseLong(st.nextToken());
+            long p = Long.parseLong(st.nextToken());
+            long a = Long.parseLong(st.nextToken());
 
-            if(second == 0) break;
-
-            long p = Math.max(first, second);
-            long a = Math.min(first, second);
+            if(p == 0) break;
 
             if(isPrime(p)) {
                 sb.append("no\n");
