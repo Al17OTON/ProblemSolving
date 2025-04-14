@@ -1,6 +1,8 @@
 import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.InputStreamReader;
 
+// Dynamic Segment Tree
 public class Main {
     static class Node {
         Node[] child;
@@ -23,6 +25,8 @@ public class Main {
     static Node root = new Node(-1);
     static String[] arr;
     public static void main(String[] args) throws Exception {
+        // N^2 으로 못 푸는 테스트케이스, 동적 세그먼트 트리는 제한시간 내로 풀 수 있다.
+        // System.setIn(new FileInputStream("C:/Users/byung/Desktop/알고리즘/2179_in.txt"));
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         N = Integer.parseInt(br.readLine());
 
