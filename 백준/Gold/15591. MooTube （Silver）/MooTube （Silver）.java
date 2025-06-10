@@ -27,8 +27,7 @@ public class Main {
         StringTokenizer st = new StringTokenizer(br.readLine());
         N = Integer.parseInt(st.nextToken());
         Q = Integer.parseInt(st.nextToken());
-
-        adj = new int[N + 1][N + 1];
+        
         adjlist = new List[N + 1];
         for(int i = 0; i <= N; ++i) adjlist[i] = new ArrayList<>();
 
@@ -39,9 +38,6 @@ public class Main {
             q = Integer.parseInt(st.nextToken());
             r = Integer.parseInt(st.nextToken());
 
-            adj[p][q] = r;
-            adj[q][p] = r;
-
             adjlist[p].add(new Node(q, r));
             adjlist[q].add(new Node(p, r));
         }
@@ -51,13 +47,14 @@ public class Main {
             k = Integer.parseInt(st.nextToken());
             v = Integer.parseInt(st.nextToken());
             
+            int[] cost = new int[N + 1];
             for(int i = 0; i < adjlist[v].size(); ++i) {
-                dfs(v, adjlist[v].get(i).to, adjlist[v].get(i).w, v);
+                dfs(v, adjlist[v].get(i).to, adjlist[v].get(i).w, v, cost);
             }
 
             int count = 0;
             for(int i = 1; i <= N; ++i) {
-                if(adj[v][i] >= k) {
+                if(cost[i] >= k) {
                     ++count;
                 }
             }
@@ -67,13 +64,13 @@ public class Main {
         System.out.println(sb);
     }
 
-    static void dfs(int start, int cur, int min, int pre) {
-        if(adj[start][cur] == 0) adj[start][cur] = min;
+    static void dfs(int start, int cur, int min, int pre, int[] cost) {
+        if(cost[cur] == 0) cost[cur] = min;
         
         for(int i = 0; i < adjlist[cur].size(); ++i) {
             Node n = adjlist[cur].get(i);
             if(n.to == pre) continue;
-            dfs(start, n.to, Math.min(min, n.w), cur);
+            dfs(start, n.to, Math.min(min, n.w), cur, cost);
         }
     }
 
