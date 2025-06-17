@@ -52,10 +52,6 @@ public class Main {
     }
 
     static int combination(int idx, int power, boolean[][] sel) {
-        if(idx >= weapons.size()) {
-            return power;
-        }
-
         int max = power;
         for(int i = idx; i < weapons.size(); ++i) {
             Weapon weapon = weapons.get(i);
