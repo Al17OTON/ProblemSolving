@@ -1,76 +1,125 @@
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
 import java.util.StringTokenizer;
 
 public class Main {
-	
-	static class Room {
-		char type;
-		int num;
-		
-		public Room(char type, int num) {
-			super();
-			this.type = type;
-			this.num = num;
-		}
-	}
-	
-	static int N;
-	static List<Integer>[] adj;
-	static Room[] room;
-	public static void main(String[] args) throws NumberFormatException, IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st;
-		
-		while(true) {
-			N = Integer.parseInt(br.readLine());
-			if(N == 0) break;
-			adj = new List[N + 1];
-			room = new Room[N + 1];
-			
-			for(int n = 1; n <= N; n++) {
-				st = new StringTokenizer(br.readLine());
-				adj[n] = new ArrayList<>();
-				room[n] = new Room(st.nextToken().charAt(0), Integer.parseInt(st.nextToken()));
-				
-				while(true) {
-					int in = Integer.parseInt(st.nextToken());
-					if(in == 0) break;
-					adj[n].add(in);
-				}
-			}
-			
-			boolean[] v = new boolean[N + 1];
-			v[1] = true;
-			if(dfs(1, 0, v)) System.out.println("Yes");
-			else System.out.println("No");
-		}
-	}
-	
-	static boolean dfs(int idx, int money, boolean[] v) {
-		Room cur = room[idx];
-		
-		if(cur.type == 'L') money = money < cur.num ? cur.num : money;
-		else if(cur.type == 'T') {
-			if(money < cur.num) return false;
-			money = money - cur.num;
-		}
-		
-		if(idx == N) {
-			return true;
-		}
-		
-		for(int i = 0; i < adj[idx].size(); i++) {
-			int next = adj[idx].get(i);
-			if(!v[next]) { 
-				v[next] = true;
-				if(dfs(next, money, v)) return true;
-				v[next] = false;
-			}
-		}
-		return false;
-	}
+
+    static class Player {
+        int money;
+        public Player(int money) {
+            this.money = money;
+        }
+    }
+
+    static interface Room {
+        void enter(Player p);
+        
+    }
+
+    static class EmptyRoom extends RoomData implements Room{
+        
+        public EmptyRoom(int cost) {
+            super(cost);
+        }
+
+        @Override
+        public void enter(Player p) {
+            // do nothing
+        }
+    }
+    static class TrollRoom extends RoomData implements Room {
+
+        public TrollRoom(int cost) {
+            super(cost);
+        }
+
+        @Override
+        public void enter(Player p) {
+            p.money -= cost;
+        }
+    }
+    static class LeprechaunRoom extends RoomData implements Room {
+
+        public LeprechaunRoom(int cost) {
+            super(cost);
+        }
+
+        @Override
+        public void enter(Player p) {
+            p.money = Math.max(p.money, cost);
+        }
+    }
+    static class RoomData {
+        int cost;
+        public RoomData(int cost) {
+            this.cost = cost;
+        }
+    }
+
+    static int N;
+    static Room[] rooms;
+    static int[][] adj;
+    public static void main(String[] args) throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringBuilder sb = new StringBuilder();
+
+        rooms = new Room[1001];
+        adj = new int[1001][1002];
+        // int[] v = new int[1001];
+        while(true) {
+            N = Integer.parseInt(br.readLine());
+            if(N == 0) break;
+            
+            StringTokenizer st;
+            for(int n = 1; n <= N; ++n) {
+                st = new StringTokenizer(br.readLine());
+
+                char code = st.nextToken().charAt(0);
+                int cost = Integer.parseInt(st.nextToken());
+
+                int idx = 0;
+                while(st.hasMoreTokens()) {
+                    int roomNum = Integer.parseInt(st.nextToken());
+                    adj[n][idx++] = roomNum;
+                }
+                
+                switch (code) {
+                    case 'E':
+                        rooms[n] = new EmptyRoom(cost);
+                        break;
+                    case 'L':
+                        rooms[n] = new LeprechaunRoom(cost);
+                        break;
+                    case 'T':
+                        rooms[n] = new TrollRoom(cost);
+                        break;
+                }
+            }
+            
+            // Arrays.fill(v, -1);
+            boolean[] v = new boolean[N + 1];
+            sb.append(dfs(new Player(0), 1, v) ? "Yes\n" : "No\n");
+        }
+        System.out.println(sb);
+    }
+
+    static boolean dfs(Player p, int roomNum, boolean[] v) {
+        rooms[roomNum].enter(p);
+
+        if(p.money < 0) return false;
+        if(roomNum == N) return true;
+        
+        int idx = 0;
+        while(adj[roomNum][idx] != 0) {
+            if(!v[adj[roomNum][idx]]) {
+                v[adj[roomNum][idx]] = true;
+                Player clone = new Player(p.money);
+                if(dfs(clone, adj[roomNum][idx], v)) return true;
+                v[adj[roomNum][idx]] = false;
+            }
+            ++idx;
+        }
+        return false;
+    }
 }
