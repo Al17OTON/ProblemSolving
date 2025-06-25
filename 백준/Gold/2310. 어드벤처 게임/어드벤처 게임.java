@@ -1,6 +1,5 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.Arrays;
 import java.util.StringTokenizer;
 
 public class Main {
@@ -13,7 +12,7 @@ public class Main {
     }
 
     static interface Room {
-        void enter(Player p);
+        boolean enter(Player p);
         
     }
 
@@ -24,8 +23,9 @@ public class Main {
         }
 
         @Override
-        public void enter(Player p) {
+        public boolean enter(Player p) {
             // do nothing
+            return true;
         }
     }
     static class TrollRoom extends RoomData implements Room {
@@ -35,8 +35,10 @@ public class Main {
         }
 
         @Override
-        public void enter(Player p) {
+        public boolean enter(Player p) {
             p.money -= cost;
+            if(p.money < 0) return false;
+            return true;
         }
     }
     static class LeprechaunRoom extends RoomData implements Room {
@@ -46,8 +48,9 @@ public class Main {
         }
 
         @Override
-        public void enter(Player p) {
+        public boolean enter(Player p) {
             p.money = Math.max(p.money, cost);
+            return true;
         }
     }
     static class RoomData {
@@ -105,9 +108,8 @@ public class Main {
     }
 
     static boolean dfs(Player p, int roomNum, boolean[] v) {
-        rooms[roomNum].enter(p);
+        if(!rooms[roomNum].enter(p)) return false;;
 
-        if(p.money < 0) return false;
         if(roomNum == N) return true;
         
         int idx = 0;
