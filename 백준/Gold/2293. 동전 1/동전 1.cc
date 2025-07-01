@@ -20,7 +20,6 @@ int main() {
 	sort(coin, coin + N);
 
 	for (int n = 0; n < N; ++n) {
-		if (coin[n] > K) continue;
 		for (int i = coin[n]; i <= K; ++i) {
 			dp[i] += dp[i - coin[n]];
 		}
