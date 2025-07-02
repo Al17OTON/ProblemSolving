@@ -4,7 +4,9 @@ import java.util.PriorityQueue;
 import java.util.StringTokenizer;
 
 public class Main {
+
     static int N, K;
+    static int min = Integer.MAX_VALUE;
     static int[][] adj;
     static int[][] dp;
     public static void main(String[] args) throws Exception {
@@ -33,21 +35,23 @@ public class Main {
 
         boolean[] v = new boolean[N];
         v[K] = true;
-        System.out.println(dfs(K, 0, v, 1));
+        dfs(K, 0, v, 1);
+        System.out.println(min);
     }
 
 
-    static int dfs(int k, int time, boolean[] v, int count) {
-        if(count == N) return time;
+    static void dfs(int k, int time, boolean[] v, int count) {
+        if(min <= time) return;
+        if(count == N) {
+            min = time;
+            return;
+        }
 
-        int min = Integer.MAX_VALUE;
         for(int i = 0; i < N; ++i) {
             if(i == k || v[i]) continue;
             v[i] = true;
-            min = Math.min(min, dfs(i, time + dp[k][i], v, count + 1));
+            dfs(i, time + dp[k][i], v, count + 1);
             v[i] = false;
         }
-        return min;
     }
-
 }
