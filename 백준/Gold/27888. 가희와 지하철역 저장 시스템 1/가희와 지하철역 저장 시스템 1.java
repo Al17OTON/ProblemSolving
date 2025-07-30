@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.StringTokenizer;
 
 public class Main {
+
     static int N, R;
     static Map<String, Integer> map = new HashMap<>();
     static int[] featureCount;
@@ -15,12 +16,11 @@ public class Main {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st, st2;
         StringBuilder sb = new StringBuilder();
-        featureCount = new int[(int)Math.pow(2, 10)];
+        featureCount = new int[(int)Math.pow(2, 9)];
         N = Integer.parseInt(br.readLine());
 
         for(int n = 0; n < N; ++n) {
-            String stationName = br.readLine();
-            map.put(stationName, 0);
+            map.put(br.readLine(), 0);
         }
         featureCount[0] = N;
 
@@ -45,7 +45,6 @@ public class Main {
 
             } else {
                 st2 = new StringTokenizer(st.nextToken(), ",");
-                // TODO : features update 막기, 그리고 일부 특징만 있어도 집계해야함
                 int feat = 0;
                 boolean flag = false;
                 while(st2.hasMoreTokens()) {
