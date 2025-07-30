@@ -38,10 +38,9 @@ public class Main {
                 while(st2.hasMoreTokens()) {
                     feat |= (1 << feat2Integer(st2.nextToken()));
                 }
-                int prev = map.get(target);
-                --featureCount[prev];
+                --featureCount[map.replace(target, feat)];
                 ++featureCount[feat];
-                map.replace(target, feat);
+                
 
             } else {
                 st2 = new StringTokenizer(st.nextToken(), ",");
