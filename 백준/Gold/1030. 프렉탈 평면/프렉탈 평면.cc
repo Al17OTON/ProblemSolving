@@ -35,21 +35,12 @@ void dfs(int r, int c, int len, bool black) {
 		return;
 	}
 
-	if (black) {
-		for (int i = max(r, R1); i < min(r + len, R2 + 1); ++i) {
-			for (int j = max(c, C1); j < min(c + len, C2 + 1); ++j) {
-				map[i - R1][j - C1] = true;
-			}
-		}
-		return;
-	}
-
 	int n_len = len / N;
 
 	for (int i = r, i_idx = 0; i_idx < N; i += n_len, ++i_idx) {
 		for (int j = c, j_idx = 0; j_idx < N; j += n_len, ++j_idx) {
 
-			dfs(i, j, n_len, (i_idx >= padding && j_idx >= padding && i_idx < padding + K && j_idx < padding + K));
+			dfs(i, j, n_len, black ||(i_idx >= padding && j_idx >= padding && i_idx < padding + K && j_idx < padding + K));
 
 		}
 	}
