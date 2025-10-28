@@ -1,10 +1,10 @@
 # [level 2] 두 큐 합 같게 만들기 - 118667 
 
-[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/118667) 
+[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/118667?language=csharp) 
 
 ### 성능 요약
 
-메모리: 27.6 MB, 시간: 7.63 ms
+메모리: 44.8 MB, 시간: 7.77 ms
 
 ### 구분
 
@@ -16,7 +16,7 @@
 
 ### 제출 일자
 
-2025년 10월 28일 10:14:43
+2025년 10월 29일 00:29:22
 
 ### 문제 설명
 
