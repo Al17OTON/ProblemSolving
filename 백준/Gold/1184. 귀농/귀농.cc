@@ -1,5 +1,8 @@
 #include <iostream>
 #include <unordered_map>
+#include <vector>
+#include <cmath>
+#include <string>
 
 using namespace std;
 
@@ -22,7 +25,7 @@ int main() {
 	for (int i = 1; i <= N; ++i) {
 		for (int j = 1; j <= N; ++j) {
 
-			unordered_map<int, int> up_right, down_right, up_left, down_left;
+			unordered_map<int, int> up_right, down_right;
 
 			// 오른쪽 위
 			for (int ii = i - 1; ii > 0; --ii) {
@@ -44,7 +47,7 @@ int main() {
 			for (int ii = i; ii > 0; --ii) {
 				for (int jj = j; jj > 0; --jj) {
 					int sum = sum_map[i][j] - sum_map[i][jj - 1] - sum_map[ii - 1][j] + sum_map[ii - 1][jj - 1];
-					++up_left[sum];
+					answer += down_right[sum];
 				}
 			}
 
@@ -52,15 +55,8 @@ int main() {
 			for (int ii = i; ii <= N; ++ii) {
 				for (int jj = j; jj > 0; --jj) {
 					int sum = sum_map[ii][j] - sum_map[ii][jj - 1] - sum_map[i - 1][j] + sum_map[i - 1][jj - 1];
-					++down_left[sum];
+					answer += up_right[sum];
 				}
-			}
-
-			for (unordered_map<int, int>::iterator iter = up_left.begin(); iter != up_left.end(); ++iter) {
-				answer += iter->second * down_right[iter->first];
-			}
-			for (unordered_map<int, int>::iterator iter = down_left.begin(); iter != down_left.end(); ++iter) {
-				answer += iter->second * up_right[iter->first];
 			}
 		}
 	}
