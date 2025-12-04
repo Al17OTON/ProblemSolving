@@ -6,17 +6,17 @@ using namespace std;
 
 int N;
 int cost[15][15];
-int dp[15][32768][10];
+int dp[15][10][32768];
 
 int dfs(int idx, int price, int bit) {
-	if (dp[idx][bit][price] != -1) return dp[idx][bit][price];
+	if (dp[idx][price][bit] != -1) return dp[idx][price][bit];
 
 	int res = 0;
 	for (int i = 1; i < N; ++i) {
 		if ((bit & (1 << i)) || cost[idx][i] < price) continue;
 		res = max(res, dfs(i, cost[idx][i], (bit | (1 << i))));
 	}
-	return dp[idx][bit][price] = res + 1;
+	return dp[idx][price][bit] = res + 1;
 }
 
 int main() {
