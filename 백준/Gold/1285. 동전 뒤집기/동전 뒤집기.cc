@@ -6,13 +6,35 @@ using namespace std;
 int N, full;
 int map[20];
 
-int get_col(int idx, const int m[]) {
+int get_col(int idx) {
 	int count = 0;
 	int bit = (1 << idx);
 	for (int i = 0; i < N; ++i) {
-		if (m[i] & bit) ++count;
+		if (map[i] & bit) ++count;
 	}
 	return count;
+}
+
+int dfs(int idx) {
+	if (idx == N) {
+		int count = 0;
+		for (int c = 0; c < N; ++c) {
+			int c_count = get_col(c);
+			if (c_count > N / 2) {
+				count += (N - c_count);
+			}
+			else {
+				count += c_count;
+			}
+		}
+		return count;
+	}
+
+	int original = map[idx];
+	map[idx] ^= full;
+	int res = dfs(idx + 1);
+	map[idx] = original;
+	return min(res, dfs(idx + 1));
 }
 
 int main() {
@@ -32,27 +54,5 @@ int main() {
 		map[i] = coin;
 	}
 
-	int answer = 99999;
-	int tmp[20];
-	for (int i = 0; i <= full; ++i) {
-		for (int r = 0; r < N; ++r) {
-			if (i & (1 << r)) tmp[r] = map[r] ^ full;
-			else tmp[r] = map[r];
-		}
-
-		int count = 0;
-		for (int c = 0; c < N; ++c) {
-			int c_count = get_col(c, tmp);
-			if (c_count > N / 2) {
-				count += (N - c_count);
-			}
-			else {
-				count += c_count;
-			}
-		}
-
-		answer = min(answer, count);
-	}
-
-	cout << answer;
+	cout << dfs(0);
 }
