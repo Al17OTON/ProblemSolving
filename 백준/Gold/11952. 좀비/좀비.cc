@@ -59,7 +59,7 @@ int main() {
 		dfs(city, 0);
 	}
 
-	fill(dist + 2, dist + N + 1, 987654321000);
+	fill(dist + 2, dist + N + 1, 98765432100);
 	priority_queue<Node> pq;
 	pq.push({ 1, 0 });
 
