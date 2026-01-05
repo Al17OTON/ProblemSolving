@@ -1,7 +1,6 @@
 #include <string>
 #include <vector>
 #include <algorithm>
-#include <cctype>
 
 using namespace std;
 
@@ -13,7 +12,7 @@ struct File {
     int n;
     int idx;
     
-    string to_string() {
+    string to_string() const {
         return head + num + tail;
     }
 };
@@ -35,6 +34,13 @@ bool is_head(char c) {
 }
 bool is_num(char c) {
     return c >= '0' && c <= '9';
+}
+bool is_upper(char c) {
+    return c >= 'A' && c <= 'Z';
+}
+char tolower(char c) {
+    if(is_upper(c)) return 'a' + (c - 'A');
+    return c;
 }
 
 vector<string> solution(vector<string> files) {
