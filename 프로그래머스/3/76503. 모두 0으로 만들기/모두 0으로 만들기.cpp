@@ -1,6 +1,6 @@
 #include <string>
 #include <vector>
-// #include <algorithm>
+#include <algorithm>
 
 using namespace std;
 
@@ -15,7 +15,8 @@ long long dfs(int idx, int pre) {
         long long c = dfs(adj[idx][i], idx);
         res += c;
         
-        answer += c > 0 ? c : -c;
+        answer += abs(c);
+        // answer += c > 0 ? c : -c;
     }
     return res;
 }
