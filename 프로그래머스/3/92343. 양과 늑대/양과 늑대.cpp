@@ -83,6 +83,7 @@ int permutation(int wolf_bit, int wolf_count, int sheep_count, int v) {
 }
 
 
+// N <= 17 이므로 인접한 양들을 집합으로 모아준다면 순열을 8!까지 줄일 수 있다...
 int solution(vector<int> info, vector<vector<int>> edges) {
     N = info.size();
     for(int i = 0; i < info.size(); ++i) {
