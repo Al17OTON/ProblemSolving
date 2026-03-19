@@ -16,11 +16,8 @@ int main() {
     cin >> N >> M;
 
     for(int n = 0; n < N; ++n) {
-        string line;
-        cin >> line;
-        
-        desk[n] = line;
-        ++map[line];
+        cin >> desk[n];
+        ++map[desk[n]];
     }
     cin >> K;
 
