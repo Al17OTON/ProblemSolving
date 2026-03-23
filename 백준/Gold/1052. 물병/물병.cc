@@ -1,33 +1,24 @@
 #include <iostream>
-#include <vector>
 
 using namespace std;
 
 int N, K;
-vector<int> arr;
 
 int main() {
     cin >> N >> K;
 
-    arr.push_back(1);
-    int n = 1;
-    while(n < N) {
-        n *= 2;
-        arr.push_back(n);
-    }
-
     for(int i = 0; i < K - 1; ++i) {
-        for(int j = arr.size() - 1; j >= 0; --j) {
-            if(arr[j] < N) {
-                N -= arr[j];
+        for(int j = (1 << 30); j > 0; j /= 2) {
+            if(j < N) {
+                N -= j;
                 break;
             }
         }
     }
 
-    for(int i = 0; i < arr.size(); ++i) {
-        if(arr[i] >= N) {
-            cout << arr[i] - N;
+    for(int i = 1; i <= (1 << 30); i *= 2) {
+        if(i >= N) {
+            cout << i - N;
             break;
         }
     }
