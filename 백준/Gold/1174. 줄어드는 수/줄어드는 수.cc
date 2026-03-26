@@ -1,29 +1,34 @@
 #include <iostream>
-#include <queue>
+#include <vector>
+#include <algorithm>
 
 using namespace std;
 
-void bfs(int N) {
-    queue<long long> q;
-    for(int i = 0; i < 10; ++i) q.push(i);
-    int n = 1;
+vector<long long> nums;
 
-    while(n < N && !q.empty()) {
-        long long num = q.front(); q.pop();
-        
-        for(int i = 0; i < num % 10; ++i) {
-            q.push(num * 10 + i);
+void dfs(long long num, int idx) {
+    if(idx == 0) {
+        for(int i = 0; i < 10; ++i) {
+            nums.push_back(i);
+            dfs(i, 1);
         }
-        ++n;
+    } else {
+        for(int i = num % 10 - 1; i >= 0; --i) {
+            long long next = num * 10 + i;
+            nums.push_back(next);
+            dfs(next, idx + 1);
+        }
     }
-
-    if(q.empty()) cout << -1;
-    else cout << q.front();
 }
 
 int main() {
     int N;
     cin >> N;
 
-    bfs(N);
+    dfs(0, 0);
+
+    sort(nums.begin(), nums.end());
+
+    if(nums.size() >= N) cout << nums[N - 1];
+    else cout << -1;
 }
