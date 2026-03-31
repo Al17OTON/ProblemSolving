@@ -1,12 +1,19 @@
 #include <iostream>
 #include <vector>
-#include <cmath>
 
 using namespace std;
 
 int N;
 vector<int> vec;
 vector<int> count(1000001, 0);
+
+double sqrt(double target) {
+    double x = target;
+    for(int i = 0; i < 20; ++i) {
+        x = (x + (target / x)) / 2;
+    }
+    return x;
+}
 
 int main() {
     ios::sync_with_stdio(false);
