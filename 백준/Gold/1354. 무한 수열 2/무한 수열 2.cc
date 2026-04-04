@@ -1,16 +1,16 @@
 #include <iostream>
-#include <map>
-
+#define MAX 30000001
 using namespace std;
 
 long long N, P, Q, X, Y;
-map<long long, long long> m;
+int dp[MAX] = {0};
 
 long long dfs(long long i) {
     if(i <= 0) return 1;
-    if(m.find(i) != m.end()) return m.find(i)->second;
+    if(i >= MAX) return dfs(i / P - X) + dfs(i / Q - Y);
+    if(dp[i]) return dp[i];
 
-    return m[i] = dfs(i / P - X) + dfs(i / Q - Y);
+    return dp[i] = dfs(i / P - X) + dfs(i / Q - Y);
 }
 
 int main() {
