@@ -10,21 +10,6 @@ using namespace std;
 int N, M;
 vector<Element> vec;
 
-bool dfs(int idx, const int target, int left) {
-    if(idx == N) {
-        return left == 0;
-    }
-    else if(left == 0) {
-        return false;
-    }
-    
-    for(int i = 1; i <= left; ++i) {
-        if(vec[idx].a * i + vec[idx].b != target) continue;
-        if(dfs(idx + 1, target, left - i)) return true;
-    }
-    return false;
-}
-
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
@@ -39,15 +24,18 @@ int main() {
 
     cin >> M;
 
-    bool flag = true;
-    for(int i = 1; i <= (M - N) + 1; ++i) {
-        if(dfs(1, vec[0].a * i + vec[0].b, M - i)) {
-            cout << vec[0].a * i + vec[0].b;
-            flag = false;
+    int answer = 0;
+    for(int i = 1; i <= M - N + 1; ++i) {
+        int target = vec[0].a * i + vec[0].b;
+        int count = i;
+        for(int j = 1; j < vec.size(); ++j) {
+            count += (target - vec[j].b) / vec[j].a;
+        }
+        if(count == M) {
+            answer = target;
             break;
         }
     }
 
-    if(flag) cout << 0;
-    
+    cout << answer;
 }
